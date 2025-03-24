@@ -22,6 +22,7 @@ model Exam {
   Participant Participant[]
   sections    Section[]
   passcode    String
+  isActive    Boolean       @default(false)
   startTime   DateTime
   endTime     DateTime
   duration    Int
@@ -30,13 +31,14 @@ model Exam {
 }
 
 model Participant {
-  id        String   @id @default(uuid())
-  name      String
-  username  String
-  password  String
-  examId    String
-  exam      Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  id                String              @id @default(uuid())
+  name              String
+  username          String
+  password          String
+  examId            String
+  exam              Exam                @relation(fields: [examId], references: [id], onDelete: Cascade)
+  createdAt         DateTime            @default(now())
+  ParticipantAnswer ParticipantAnswer[]
 }
 
 model ParticipantSession {
@@ -84,6 +86,7 @@ model ParticipantAnswer {
   questionId    String
   question      Question             @relation(fields: [questionId], references: [id], onDelete: Cascade)
   participantId String
+  Participant   Participant          @relation(fields: [participantId], references: [id], onDelete: Cascade)
   answerText    String? // Untuk short answer
   answerFile    String? // URL file jika tipe file answer
   optionId      String // Untuk multiple choice
