@@ -2,12 +2,8 @@
 
 import { unauthenticatedAction } from "@/lib/safe-actions";
 import { createClient } from "@/lib/supabase/server";
-import { z } from "zod";
-
-const loginSchema = z.object({
-  email: z.string(),
-  password: z.string(),
-});
+import { loginSchema, registerSchema } from "./schema";
+import { PublicError } from "../../../use-cases/errors";
 
 export const loginAction = unauthenticatedAction
   .createServerAction()
@@ -17,13 +13,13 @@ export const loginAction = unauthenticatedAction
 
     const { error } = await supabase.auth.signInWithPassword(input);
     if (error) {
-      throw error;
+      throw new PublicError(error.message, error.code);
     }
   });
 
 export const registerAction = unauthenticatedAction
   .createServerAction()
-  .input(loginSchema)
+  .input(registerSchema)
   .handler(async ({ input }) => {
     const supabase = await createClient();
 
@@ -32,7 +28,7 @@ export const registerAction = unauthenticatedAction
       password: input.password,
       options: {
         data: {
-          display_name: "Test User",
+          display_name: input.name,
         },
       },
     });

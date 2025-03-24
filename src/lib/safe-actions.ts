@@ -2,22 +2,30 @@ import { createServerActionProcedure } from "zsa";
 import { createClient } from "./supabase/server";
 import { redirect } from "next/navigation";
 import { getPrismaClient } from "./get-prisma-client";
-import { z } from "zod";
+import { PublicError } from "../../use-cases/errors";
 
 /**
  * Transforms an error object into a standardized error response format.
  *
- * @param error - The error object that contains the message and code.
+ * @param { err } - The error object that contains the message and code.
  * @returns An object containing the error message and code.
  */
 
-function shapeError(error: any) {
-  return {
-    error: {
-      message: error.message,
-      code: error.code,
-    },
-  };
+function shapeError({ err }: any) {
+  const isAllowed = err instanceof PublicError;
+  const isDev = process.env.NODE_ENV === "development";
+
+  if (isAllowed || isDev) {
+    return {
+      code: err.code ?? "UNKNOWN_ERROR",
+      message: err.message,
+    };
+  } else {
+    return {
+      code: "UNKNOWN_ERROR",
+      message: "Oops! Terjadi kesalahan",
+    };
+  }
 }
 
 export const authenticatedAction = createServerActionProcedure()
