@@ -4,6 +4,7 @@ import { unauthenticatedAction } from "@/lib/safe-actions";
 import { createClient } from "@/lib/supabase/server";
 import { loginSchema, registerSchema } from "./schema";
 import { PublicError } from "../../../use-cases/errors";
+import { redirect } from "next/navigation";
 
 export const loginAction = unauthenticatedAction
   .createServerAction()
@@ -14,6 +15,8 @@ export const loginAction = unauthenticatedAction
     const { error } = await supabase.auth.signInWithPassword(input);
     if (error) {
       throw new PublicError(error.message, error.code);
+    } else {
+      redirect("/dashboard");
     }
   });
 
