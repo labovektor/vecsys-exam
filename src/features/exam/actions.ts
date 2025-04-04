@@ -82,7 +82,7 @@ export const toggleExamsStatusAction = authenticatedAction
         userId: user.id,
       },
       data: {
-        isActive: !currentExam?.isActive,
+        isActive: !currentExam.isActive,
       },
     });
   });
