@@ -30,12 +30,17 @@ export const getExamByIdAction = authenticatedAction
   .input(z.object({ id: z.string() }))
   .handler(async ({ input, ctx }) => {
     const { db, user } = ctx;
-    return db.exam.findFirst({
-      where: {
-        id: input.id,
-        userId: user.id,
-      },
-    });
+    return unstable_cache(
+      () =>
+        db.exam.findFirst({
+          where: {
+            id: input.id,
+            userId: user.id,
+          },
+        }),
+      [input.id],
+      { tags: [input.id] }
+    )();
   });
 
 export const createNewExamAction = authenticatedAction
