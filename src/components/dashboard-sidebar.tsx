@@ -24,7 +24,7 @@ const items = [
   },
   {
     title: "Exams",
-    url: "/dashboard/exams",
+    url: "/dashboard/exam",
     icon: Newspaper,
   },
   {
