@@ -27,6 +27,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   loading?: boolean;
+  message?: string;
   actions?: React.ReactNode;
 }
 
@@ -35,6 +36,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   loading,
+  message,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -107,7 +109,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  {loading ? "Loading..." : "No results."}
+                  {loading ? "Loading..." : message ?? "No Data."}
                 </TableCell>
               </TableRow>
             )}

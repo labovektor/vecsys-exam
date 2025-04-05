@@ -1,10 +1,16 @@
 import { DataTable } from "@/components/table/data-table";
 import { buttonVariants } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { getAllExamAction } from "@/features/exam/actions";
 import { examColumns } from "@/features/exam/components/columns";
-import { cn } from "@/lib/utils";
-import { Eye, Plus, Trash2 } from "lucide-react";
-import Link from "next/link";
+import NewExamForm from "@/features/exam/forms/NewExamForm";
+import { Plus } from "lucide-react";
 import React from "react";
 
 const ListExamPage = async () => {
@@ -14,14 +20,19 @@ const ListExamPage = async () => {
       <DataTable
         columns={examColumns}
         data={exams ?? []}
+        message={err?.message}
         actions={
-          <Link
-            className={buttonVariants({ variant: "default" })}
-            href="/dashboard/exam/new"
-          >
-            <Plus />
-            New Exam
-          </Link>
+          <Dialog>
+            <DialogTrigger className={buttonVariants({ variant: "default" })}>
+              <Plus /> New Exam
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>New Exam</DialogTitle>
+              </DialogHeader>
+              <NewExamForm />
+            </DialogContent>
+          </Dialog>
         }
       />
     </div>

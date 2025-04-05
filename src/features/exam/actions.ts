@@ -4,7 +4,7 @@ import { authenticatedAction } from "@/lib/safe-actions";
 import { examSchema } from "./schema";
 import { z } from "zod";
 import { NotFoundError } from "../../../use-cases/errors";
-import { revalidateTag, unstable_cache } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 
 export const getAllExamAction = authenticatedAction
   .createServerAction()
@@ -56,7 +56,7 @@ export const createNewExamAction = authenticatedAction
       },
     });
 
-    revalidateTag("exams");
+    revalidatePath("/dashboard/exam");
 
     return exam;
   });

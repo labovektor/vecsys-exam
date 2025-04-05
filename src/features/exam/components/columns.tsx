@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ExamSchemaType } from "../schema";
+import { beautifyDate } from "@/lib/utils";
 
 export const examColumns: ColumnDef<ExamSchemaType>[] = [
   { accessorKey: "title", header: "Title" },
@@ -9,33 +10,13 @@ export const examColumns: ColumnDef<ExamSchemaType>[] = [
     accessorKey: "startTime",
     header: "Start Time",
     enableGlobalFilter: false,
-    cell: ({ row }) =>
-      new Date(row.getValue("startTime")).toLocaleString("id-ID", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        timeZone: "Asia/Jakarta",
-        timeZoneName: "short",
-        hour12: false,
-      }),
+    cell: ({ row }) => beautifyDate(row.getValue("startTime"), "FULL"),
   },
   {
     accessorKey: "endTime",
     header: "End Time",
     enableGlobalFilter: false,
-    cell: ({ row }) =>
-      new Date(row.getValue("endTime")).toLocaleString("id-ID", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        timeZone: "Asia/Jakarta",
-        timeZoneName: "short",
-        hour12: false,
-      }),
+    cell: ({ row }) => beautifyDate(row.getValue("endTime"), "FULL"),
   },
   {
     accessorKey: "duration",

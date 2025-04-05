@@ -146,7 +146,9 @@ const NewExamForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
       </form>
     </Form>
   );
