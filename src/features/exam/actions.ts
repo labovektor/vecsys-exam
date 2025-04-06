@@ -4,7 +4,7 @@ import { authenticatedAction } from "@/lib/safe-actions";
 import { examSchema } from "./schema";
 import { z } from "zod";
 import { NotFoundError } from "../../../use-cases/errors";
-import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
+import { revalidatePath, unstable_cache } from "next/cache";
 
 export const getAllExamAction = authenticatedAction
   .createServerAction()
@@ -90,4 +90,19 @@ export const toggleExamsStatusAction = authenticatedAction
         isActive: !currentExam.isActive,
       },
     });
+  });
+
+export const deleteExamAction = authenticatedAction
+  .createServerAction()
+  .input(z.object({ id: z.string() }))
+  .handler(async ({ input, ctx }) => {
+    const { db } = ctx;
+
+    await db.exam.delete({
+      where: {
+        id: input.id,
+      },
+    });
+
+    revalidatePath("/dashboard/exam");
   });

@@ -1,7 +1,7 @@
 import { createServerActionProcedure } from "zsa";
 import { createClient } from "./supabase/server";
 import { redirect } from "next/navigation";
-import { getPrismaClient } from "./get-prisma-client";
+import { prisma } from "./get-prisma-client";
 import { PublicError } from "../../use-cases/errors";
 
 /**
@@ -31,18 +31,16 @@ function shapeError({ err }: any) {
 export const authenticatedAction = createServerActionProcedure()
   .experimental_shapeError(shapeError)
   .handler(async () => {
-    const db = getPrismaClient();
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
     if (error || !data.user) {
       redirect("/login");
     }
-    return { db, user: data.user };
+    return { db: prisma, user: data.user };
   });
 
 export const unauthenticatedAction = createServerActionProcedure()
   .experimental_shapeError(shapeError)
   .handler(async () => {
-    const db = getPrismaClient();
-    return { db };
+    return { db: prisma };
   });

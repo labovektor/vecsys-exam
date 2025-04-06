@@ -31,3 +31,8 @@ export const examSchema = z
   );
 
 export type ExamSchemaType = z.infer<typeof examSchema>;
+
+export type ExamRes = ExamSchemaType & {
+  id: string;
+  isActive: boolean;
+};
