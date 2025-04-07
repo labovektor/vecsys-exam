@@ -37,6 +37,12 @@ export const getExamByIdAction = authenticatedAction
             id: input.id,
             userId: user.id,
           },
+          include: {
+            Participant: true,
+            sections: {
+              include: { questions: true },
+            },
+          },
         }),
       [input.id],
       { tags: [input.id] }
@@ -81,7 +87,7 @@ export const toggleExamsStatusAction = authenticatedAction
       throw new NotFoundError();
     }
 
-    db.exam.update({
+    await db.exam.update({
       where: {
         id: input.id,
         userId: user.id,
@@ -90,6 +96,9 @@ export const toggleExamsStatusAction = authenticatedAction
         isActive: !currentExam.isActive,
       },
     });
+
+    revalidatePath("/dashboard/exam");
+    return !currentExam.isActive;
   });
 
 export const deleteExamAction = authenticatedAction
