@@ -45,7 +45,9 @@ const ToggleExamStatus = ({
           execute({ id });
         }}
       />
-      <Label htmlFor="exam-status">{isActive ? "Active" : "Inactive"}</Label>
+      <Label htmlFor="exam-status">
+        {isPending ? "Updating..." : isActive ? "Active" : "Inactive"}
+      </Label>
     </div>
   );
 };

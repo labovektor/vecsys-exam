@@ -4,7 +4,7 @@ import { authenticatedAction } from "@/lib/safe-actions";
 import { examSchema } from "./schema";
 import { z } from "zod";
 import { NotFoundError } from "../../../use-cases/errors";
-import { revalidatePath, unstable_cache } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 
 export const getAllExamAction = authenticatedAction
   .createServerAction()
@@ -98,6 +98,7 @@ export const toggleExamsStatusAction = authenticatedAction
     });
 
     revalidatePath("/dashboard/exam");
+    revalidateTag(input.id);
     return !currentExam.isActive;
   });
 
