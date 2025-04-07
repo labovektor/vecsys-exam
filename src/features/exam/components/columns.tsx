@@ -22,13 +22,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { useServerAction } from "zsa-react";
 import { deleteExamAction } from "../actions";
 import { toast } from "sonner";
 import Link from "next/link";
 
 export const examColumns: ColumnDef<ExamRes>[] = [
+  { accessorKey: "id", header: "ID" },
   { accessorKey: "title", header: "Title" },
   {
     accessorKey: "startTime",
@@ -88,18 +89,35 @@ export function EventActionColumn({ exam }: { exam: ExamRes }) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem>
-            <Link href={`/dashboard/exam/${exam.id}`}>View Exam details</Link>
+            <Link
+              href={`/dashboard/exam/${exam.id}`}
+              className={buttonVariants({
+                variant: "ghost",
+                size: "simple",
+              })}
+            >
+              <Eye />
+              View Exam details
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem
+            onClick={() => navigator.clipboard.writeText(exam.id)}
+          >
+            Copy Exam ID
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => navigator.clipboard.writeText(exam.passcode)}
           >
             Copy Exam Passcode
           </DropdownMenuItem>
+
           <DropdownMenuSeparator />
 
           <AlertDialogTrigger asChild>
             <DropdownMenuItem className="text-destructive">
-              Delete Exam
+              <Trash2 className=" text-destructive" /> Delete Exam
             </DropdownMenuItem>
           </AlertDialogTrigger>
         </DropdownMenuContent>
