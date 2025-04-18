@@ -37,10 +37,12 @@ export const authenticatedAction = createServerActionProcedure()
       redirect("/login");
     }
     return { db: prisma, user: data.user };
-  });
+  })
+  .createServerAction();
 
 export const unauthenticatedAction = createServerActionProcedure()
   .experimental_shapeError(shapeError)
   .handler(async () => {
     return { db: prisma };
-  });
+  })
+  .createServerAction();

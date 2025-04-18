@@ -7,7 +7,6 @@ import { PublicError } from "../../../use-cases/errors";
 import { redirect } from "next/navigation";
 
 export const loginAction = unauthenticatedAction
-  .createServerAction()
   .input(loginSchema)
   .handler(async ({ input }) => {
     const supabase = await createClient();
@@ -21,7 +20,6 @@ export const loginAction = unauthenticatedAction
   });
 
 export const registerAction = unauthenticatedAction
-  .createServerAction()
   .input(registerSchema)
   .handler(async ({ input }) => {
     const supabase = await createClient();

@@ -6,27 +6,24 @@ import { z } from "zod";
 import { NotFoundError } from "../../../use-cases/errors";
 import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 
-export const getAllExamAction = authenticatedAction
-  .createServerAction()
-  .handler(async ({ ctx }) => {
-    const { db, user } = ctx;
+export const getAllExamAction = authenticatedAction.handler(async ({ ctx }) => {
+  const { db, user } = ctx;
 
-    return unstable_cache(
-      () =>
-        db.exam.findMany({
-          where: {
-            userId: user.id,
-          },
-        }),
-      ["exams", user.id],
-      {
-        tags: ["exams"],
-      }
-    )();
-  });
+  return unstable_cache(
+    () =>
+      db.exam.findMany({
+        where: {
+          userId: user.id,
+        },
+      }),
+    ["exams", user.id],
+    {
+      tags: ["exams"],
+    }
+  )();
+});
 
 export const getExamByIdAction = authenticatedAction
-  .createServerAction()
   .input(z.object({ id: z.string() }))
   .handler(async ({ input, ctx }) => {
     const { db, user } = ctx;
@@ -50,7 +47,6 @@ export const getExamByIdAction = authenticatedAction
   });
 
 export const createNewExamAction = authenticatedAction
-  .createServerAction()
   .input(examSchema)
   .handler(async ({ input, ctx }) => {
     const { db, user } = ctx;
@@ -68,7 +64,6 @@ export const createNewExamAction = authenticatedAction
   });
 
 export const toggleExamsStatusAction = authenticatedAction
-  .createServerAction()
   .input(z.object({ id: z.string() }))
   .handler(async ({ input, ctx }) => {
     const { db, user } = ctx;
@@ -103,7 +98,6 @@ export const toggleExamsStatusAction = authenticatedAction
   });
 
 export const deleteExamAction = authenticatedAction
-  .createServerAction()
   .input(z.object({ id: z.string() }))
   .handler(async ({ input, ctx }) => {
     const { db } = ctx;
